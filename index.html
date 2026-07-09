@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Climate Change Quiz</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#1f6b3a,#2d89ef);display:flex;justify-content:center;align-items:center;min-height:100vh}
+.card{background:#fff;border-radius:16px;max-width:760px;width:92%;padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+h1{text-align:center}.hidden{display:none}
+button{padding:12px 18px;border:none;border-radius:8px;cursor:pointer;margin:6px}
+.option{display:block;width:100%;text-align:left;background:#f1f1f1}
+.option:hover{background:#ddd}
+.progress{height:12px;background:#ddd;border-radius:99px;overflow:hidden;margin:16px 0}
+#bar{height:100%;width:0;background:#2ecc71}
+#score{font-weight:bold}
+</style>
+</head>
+<body>
+<div class="card">
+<div id="lang">
+<h1>🌍 Climate Change Quiz</h1>
+<p>Escolha um idioma / Choose a language</p>
+<button onclick="start('pt')">Português</button>
+<button onclick="start('en')">English</button>
+</div>
+
+<div id="game" class="hidden">
+<h2 id="title"></h2>
+<div class="progress"><div id="bar"></div></div>
+<p id="count"></p>
+<p id="score"></p>
+<h3 id="question"></h3>
+<div id="options"></div>
+</div>
+
+<div id="end" class="hidden">
+<h1 id="result"></h1>
+<p id="final"></p>
+<button onclick="location.reload()">🔄 Jogar novamente / Play Again</button>
+</div>
+</div>
+
+<script>
+const quiz={
+pt:{title:"Quiz sobre Mudanças Climáticas",
+q:[
+{t:"Qual é a principal causa das mudanças climáticas?",o:["Queima de combustíveis fósseis","Vulcões","Energia solar","Chuvas"],a:0},
+{t:"O que é o efeito estufa?",o:["Resfriamento","Aprisionamento de calor","Produção de oxigênio","Mais chuva"],a:1},
+{t:"Uma consequência das mudanças climáticas?",o:["Aquecimento global","Menos vento","Mais neve","Lua cheia"],a:0},
+{t:"Diferença entre clima e tempo?",o:["São iguais","Tempo é curto prazo; clima é longo prazo","Clima muda por hora","Nenhuma"],a:1},
+{t:"Energia renovável...",o:["Aumenta emissões","Reduz emissões","Desmata","Polui"],a:1},
+{t:"Desmatamento...",o:["Reduz CO₂","Aumenta CO₂","Esfria a Terra","Não afeta"],a:1},
+{t:"Acordo de Paris...",o:["Filme","Esforço global","Cidade","Empresa"],a:1},
+{t:"Ações individuais...",o:["Ajudam reduzindo a pegada de carbono","Não ajudam","Pioram","Só governos contam"],a:0},
+{t:"Transporte...",o:["Não impacta","Veículos emitem gases","Esfria o planeta","Cria florestas"],a:1}
+]},
+en:{title:"Climate Change Quiz",
+q:[
+{t:"Main cause of climate change?",o:["Burning fossil fuels","Volcanoes","Solar energy","Rain"],a:0},
+{t:"Greenhouse effect?",o:["Cooling Earth","Trapping heat","Making oxygen","More rain"],a:1},
+{t:"One consequence?",o:["Global warming","Less wind","More snow","None"],a:0},
+{t:"Weather vs climate?",o:["Same","Weather short-term; climate long-term","Climate hourly","None"],a:1},
+{t:"Renewable energy...",o:["Raises emissions","Reduces emissions","Deforests","Pollutes"],a:1},
+{t:"Deforestation...",o:["Reduces CO2","Increases CO2","Cools Earth","No effect"],a:1},
+{t:"Paris Agreement...",o:["Movie","Global effort","City","Company"],a:1},
+{t:"Individual actions...",o:["Reduce carbon footprint","Do nothing","Worsen","Only governments matter"],a:0},
+{t:"Transportation...",o:["No impact","Vehicle emissions contribute","Cools Earth","Creates forests"],a:1}
+]}
+};
+
+let lang,idx=0,score=0;
+function start(l){lang=quiz[l];langDiv.classList.add('hidden');game.classList.remove('hidden');title.textContent=lang.title;show();}
+function show(){
+let q=lang.q[idx];
+count.textContent=`${idx+1}/${lang.q.length}`;
+scoreEl.textContent=`Pontos / Points: ${score}`;
+bar.style.width=((idx)/lang.q.length*100)+"%";
+question.textContent=q.t;
+options.innerHTML="";
+q.o.forEach((txt,i)=>{
+let b=document.createElement("button");
+b.className="option";
+b.textContent=txt;
+b.onclick=()=>answer(i);
+options.appendChild(b);
+});
+}
+function answer(i){
+if(i===lang.q[idx].a)score++; else score--;
+idx++;
+if(idx>=lang.q.length){finish();}else show();
+}
+function finish(){
+game.classList.add("hidden");
+end.classList.remove("hidden");
+bar.style.width="100%";
+result.textContent=score>=5?"🏆 Vitória / Victory":"😢 Fim de jogo / Game Over";
+final.textContent=`Pontuação / Score: ${score} de ${lang.q.length}`;
+}
+const langDiv=document.getElementById("lang"),game=document.getElementById("game"),end=document.getElementById("end");
+const title=document.getElementById("title"),count=document.getElementById("count"),scoreEl=document.getElementById("score"),question=document.getElementById("question"),options=document.getElementById("options"),bar=document.getElementById("bar"),result=document.getElementById("result"),final=document.getElementById("final");
+</script>
+</body></html>
